@@ -3,7 +3,7 @@
 A futuristic, highly interactive, and responsive portfolio website designed to showcase projects, achievements, skills, and carrier evolution. Built using React, TypeScript, Vite, TailwindCSS, and Framer Motion, with advanced glassmorphism design aesthetics and optimized for SEO and accessibility.
 
 ## 🚀 Live Demo
-- [Live Portfolio Link]([https://yashgautam.dev/](https://yash-gautam-portfolio-v4xf.vercel.app/))
+- [Live Portfolio Link](https://yash-gautam-portfolio-v4xf.vercel.app/)
 
 ---
 
