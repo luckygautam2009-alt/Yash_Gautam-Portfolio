@@ -16,7 +16,6 @@ const NAV_ITEMS = [
   { id: 'skills-section', label: 'Skills', icon: Code2 },
   { id: 'services-section', label: 'Services', icon: Layers },
   { id: 'recognition-section', label: 'Certifications', icon: Award },
-  { id: 'resume', label: 'Resume', icon: FileText, href: '/resume.pdf' },
   { id: 'end-section', label: 'Contact', icon: Send },
 ];
 
@@ -123,13 +122,7 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
-                onClick={() => {
-                  if (item.href) {
-                    window.open(item.href, '_blank', 'noopener,noreferrer');
-                  } else {
-                    handleScrollTo(item.id);
-                  }
-                }}
+                onClick={() => handleScrollTo(item.id)}
                 className="flex items-center gap-1.5 text-sm font-semibold text-gray-700 hover:text-[#8b5a2b] transition-all duration-300 py-2 px-3 rounded-lg hover:bg-white/50 cursor-pointer"
               >
                 <Icon size={15} className="text-[#8b5a2b]/70 group-hover:text-[#8b5a2b]" />
