@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fcf8f2"/>
+      <stop offset="100%" stop-color="#f4e7d7"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5a2b"/>
+      <stop offset="100%" stop-color="#6b4724"/>
+    </linearGradient>
+  </defs>
+  <circle cx="256" cy="256" r="240" fill="url(#bgGrad)" stroke="#8b5a2b" stroke-width="16" stroke-opacity="0.25"/>
+  <text x="256" y="340" font-family="'Dancing Script', 'Brush Script MT', cursive" font-size="340" font-weight="bold" text-anchor="middle" fill="url(#textGrad)">Y</text>
+</svg>
