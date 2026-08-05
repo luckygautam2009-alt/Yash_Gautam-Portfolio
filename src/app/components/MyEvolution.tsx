@@ -264,7 +264,7 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneData; index: 
       variants={cardVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className={`w-[43%] ${side==="left"?"pr-6 lg:pr-10":"pl-6 lg:pl-10"}`}
+      className={`w-[45%] ${side==="left"?"pr-6 lg:pr-10":"pl-6 lg:pl-10"}`}
       style={{ cursor:"default", perspective: "1200px" }}
     >
       {/* Outer wrapper handles the float + lift */}
@@ -504,7 +504,7 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneData; index: 
 
   // The skill-balls column (fills opposite empty side, same height as card)
   const ballsCol = (
-    <div className="w-[46%] relative self-stretch"
+    <div className="w-[45%] relative self-stretch"
       style={{ padding: side==="left" ? "0 0 0 2.5rem" : "0 2.5rem 0 0" }}>
       {milestone.skillBalls.map(ball=>(
         <SkillPill
@@ -523,23 +523,39 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneData; index: 
     <div ref={ref} className={`relative flex items-center w-full ${side==="left"?"flex-row":"flex-row-reverse"}`}>
       {cardCol}
 
-      {/* Timeline connector dot */}
-      <div className="w-[8%] flex justify-center relative z-20 flex-shrink-0">
+      {/* Timeline connector dot — must sit exactly on the center line */}
+      <div className="w-[10%] flex justify-center relative z-20 flex-shrink-0" style={{ alignSelf: "flex-start", paddingTop: "2.2rem" }}>
+
         <motion.div
           initial={{ scale:0, opacity:0 }}
           animate={isInView?{scale:1,opacity:1}:{}}
           transition={{ duration:0.45, delay:0.25, ease:"backOut" }}
           className="relative flex items-center justify-center"
         >
-          <div className="w-4 h-4 rounded-full relative z-10"
-            style={{ background:`radial-gradient(circle,#e8a0b8 0%,${C.accent} 65%)`,
-              boxShadow:`0 0 12px rgba(194,84,114,0.65),0 0 28px rgba(194,84,114,0.3)` }} />
+          {/* White ring — the "sits on line" visual */}
+          <div className="absolute rounded-full"
+            style={{
+              width: 26, height: 26,
+              background: "rgba(255,255,255,0.92)",
+              border: `2.5px solid ${C.accent}`,
+              boxShadow: `0 0 0 3px rgba(255,255,255,0.9), 0 0 16px rgba(139,90,43,0.45)`,
+              zIndex: 5,
+            }} />
+          {/* Inner colored dot */}
+          <div className="rounded-full relative z-10"
+            style={{
+              width: 14, height: 14,
+              background: `radial-gradient(circle, #e8c08a 0%, ${C.accent} 70%)`,
+              boxShadow: `0 0 10px rgba(139,90,43,0.7), 0 0 22px rgba(139,90,43,0.35)`,
+            }} />
+          {/* Pulse ring */}
           <motion.div className="absolute rounded-full"
-            style={{ width:30,height:30,background:"rgba(194,84,114,0.14)" }}
-            animate={{ scale:[1,1.7,1],opacity:[0.55,0,0.55] }}
-            transition={{ duration:2.4,repeat:Infinity,ease:"easeInOut" }} />
+            style={{ width: 40, height: 40, background: `rgba(139,90,43,0.12)`, zIndex: 1 }}
+            animate={{ scale:[1, 1.8, 1], opacity:[0.6, 0, 0.6] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }} />
         </motion.div>
       </div>
+
 
       {ballsCol}
     </div>
