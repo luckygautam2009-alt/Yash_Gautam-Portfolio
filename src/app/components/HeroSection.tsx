@@ -1,22 +1,22 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   User, Briefcase, FolderGit2, Code2, 
   Layers, Award, Send, Download, ArrowRight,
-  Settings, MessageSquare, Cpu, Triangle, ArrowUpRight, FileText
+  Settings, MessageSquare, Cpu, Triangle, ArrowUpRight, FileText,
+  Menu, X
 } from 'lucide-react';
 import userPhoto from '../../imports/user_photo.png';
-
 import launchByteLogo from '../../imports/launchbyte_logo.jpg';
 
 const NAV_ITEMS = [
-  { id: 'about-section', label: 'About', icon: User },
-  { id: 'evolution-section', label: 'Experience', icon: Briefcase },
-  { id: 'projects-section', label: 'Projects', icon: FolderGit2 },
-  { id: 'skills-section', label: 'Skills', icon: Code2 },
-  { id: 'services-section', label: 'Services', icon: Layers },
+  { id: 'about-section',       label: 'About',          icon: User },
+  { id: 'evolution-section',   label: 'Experience',     icon: Briefcase },
+  { id: 'projects-section',    label: 'Projects',       icon: FolderGit2 },
+  { id: 'skills-section',      label: 'Skills',         icon: Code2 },
+  { id: 'services-section',    label: 'Services',       icon: Layers },
   { id: 'recognition-section', label: 'Certifications', icon: Award },
-  { id: 'end-section', label: 'Contact', icon: Send },
+  { id: 'end-section',         label: 'Contact',        icon: Send },
 ];
 
 const ROLES = [
@@ -29,7 +29,278 @@ const ROLES = [
   "Hackathon Enthusiast"
 ];
 
-export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// FIXED PREMIUM NAVBAR
+// ─────────────────────────────────────────────────────────────────────────────
+function PremiumNavbar({ activeSection }: { activeSection: string }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const handleScrollTo = (id: string) => {
+    setMobileOpen(false);
+    const el = document.getElementById(id);
+    if (!el) return;
+    if ((window as any).lenis) {
+      (window as any).lenis.scrollTo(el, { offset: -80, duration: 1.4 });
+    } else {
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
+  const handleLogoClick = () => {
+    setMobileOpen(false);
+    if ((window as any).lenis) {
+      (window as any).lenis.scrollTo(0, { duration: 1.4 });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <>
+      <motion.header
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          transition: 'background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease',
+          background: scrolled
+            ? 'rgba(251,247,242,0.88)'
+            : 'transparent',
+          backdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'none',
+          boxShadow: scrolled
+            ? '0 1px 0 rgba(139,90,43,0.10), 0 4px 24px rgba(139,90,43,0.08)'
+            : 'none',
+        }}
+      >
+        <div className="w-full max-w-7xl mx-auto px-5 py-3.5 flex items-center justify-between">
+          {/* Logo */}
+          <motion.button
+            onClick={handleLogoClick}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+              fontFamily: "'Dancing Script', cursive",
+              fontSize: '2.1rem',
+              fontWeight: 700,
+              color: '#6b4724',
+              textShadow: '0 2px 4px rgba(0,0,0,0.05)',
+              lineHeight: 1,
+            }}
+            aria-label="Scroll to top"
+          >
+            Yash.
+          </motion.button>
+
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {NAV_ITEMS.map((item, idx) => {
+              const Icon = item.icon;
+              const isActive = activeSection === item.id.replace('-section', '');
+              return (
+                <motion.button
+                  key={item.label}
+                  onClick={() => handleScrollTo(item.id)}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.05 + idx * 0.04 }}
+                  whileHover={{ y: -1 }}
+                  style={{
+                    background: isActive
+                      ? 'rgba(139,90,43,0.10)'
+                      : 'transparent',
+                    border: 'none',
+                    borderRadius: 10,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 5,
+                    padding: '7px 12px',
+                    fontSize: '0.82rem',
+                    fontWeight: isActive ? 700 : 600,
+                    color: isActive ? '#8b5a2b' : '#5a4535',
+                    transition: 'background 0.2s ease, color 0.2s ease, font-weight 0.2s ease',
+                    position: 'relative',
+                    animation: isActive ? 'navActivePulse 2.5s ease infinite' : 'none',
+                  }}
+                >
+                  <Icon
+                    size={13}
+                    style={{
+                      color: isActive ? '#8b5a2b' : 'rgba(139,90,43,0.65)',
+                      transition: 'color 0.2s ease',
+                    }}
+                  />
+                  <span>{item.label}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-active-dot"
+                      style={{
+                        position: 'absolute',
+                        bottom: 4,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: 4,
+                        height: 4,
+                        borderRadius: '50%',
+                        background: '#8b5a2b',
+                      }}
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                </motion.button>
+              );
+            })}
+          </nav>
+
+          {/* Desktop CTA */}
+          <motion.a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+            whileHover={{ scale: 1.04, y: -1 }}
+            whileTap={{ scale: 0.96 }}
+            className="hidden lg:inline-flex items-center gap-2"
+            style={{
+              background: 'linear-gradient(135deg, #8b5a2b 0%, #704720 100%)',
+              color: '#fff',
+              textDecoration: 'none',
+              padding: '9px 20px',
+              borderRadius: 100,
+              fontSize: '0.82rem',
+              fontWeight: 700,
+              boxShadow: '0 4px 16px rgba(139,90,43,0.3)',
+              transition: 'box-shadow 0.3s ease',
+            }}
+          >
+            <Download size={13} />
+            Download Resume
+            <ArrowRight size={13} />
+          </motion.a>
+
+          {/* Mobile Hamburger */}
+          <motion.button
+            className="lg:hidden"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            style={{
+              background: 'rgba(255,255,255,0.65)',
+              border: '1px solid rgba(139,90,43,0.2)',
+              borderRadius: 10,
+              padding: '8px',
+              cursor: 'pointer',
+              color: '#6b4724',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            aria-label="Toggle mobile menu"
+          >
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </motion.button>
+        </div>
+
+        {/* Mobile Menu Dropdown */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+              style={{
+                overflow: 'hidden',
+                background: 'rgba(251,247,242,0.97)',
+                backdropFilter: 'blur(24px)',
+                borderTop: '1px solid rgba(139,90,43,0.12)',
+                boxShadow: '0 8px 24px rgba(139,90,43,0.12)',
+              }}
+            >
+              <div className="max-w-7xl mx-auto px-5 py-4 flex flex-col gap-1">
+                {NAV_ITEMS.map((item, idx) => {
+                  const Icon = item.icon;
+                  const isActive = activeSection === item.id.replace('-section', '');
+                  return (
+                    <motion.button
+                      key={item.label}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.25, delay: idx * 0.04 }}
+                      onClick={() => handleScrollTo(item.id)}
+                      style={{
+                        background: isActive ? 'rgba(139,90,43,0.10)' : 'transparent',
+                        border: 'none',
+                        borderRadius: 10,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        padding: '11px 14px',
+                        fontSize: '0.9rem',
+                        fontWeight: isActive ? 700 : 600,
+                        color: isActive ? '#8b5a2b' : '#5a4535',
+                        textAlign: 'left',
+                        width: '100%',
+                        transition: 'background 0.2s ease, color 0.2s ease',
+                      }}
+                    >
+                      <Icon size={15} style={{ color: isActive ? '#8b5a2b' : 'rgba(139,90,43,0.65)' }} />
+                      {item.label}
+                    </motion.button>
+                  );
+                })}
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: 'linear-gradient(135deg, #8b5a2b 0%, #704720 100%)',
+                    color: '#fff',
+                    textDecoration: 'none',
+                    padding: '11px 18px',
+                    borderRadius: 10,
+                    fontSize: '0.9rem',
+                    fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    marginTop: 6,
+                  }}
+                >
+                  <Download size={15} />
+                  Download Resume
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.header>
+    </>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HERO SECTION
+// ─────────────────────────────────────────────────────────────────────────────
+export function HeroSection({ onScrollDown, activeSection }: { onScrollDown?: () => void; activeSection: string }) {
   const [roleIndex, setRoleIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -42,27 +313,21 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
 
     const handleType = () => {
       if (!isDeleting) {
-        // Typing
         setCurrentText(fullText.substring(0, currentText.length + 1));
         setTypingSpeed(100);
-
         if (currentText === fullText) {
-          // Pause before deleting
           timer = setTimeout(() => setIsDeleting(true), 2000);
           return;
         }
       } else {
-        // Deleting
         setCurrentText(fullText.substring(0, currentText.length - 1));
         setTypingSpeed(50);
-
         if (currentText === "") {
           setIsDeleting(false);
           setRoleIndex((prev) => (prev + 1) % ROLES.length);
           return;
         }
       }
-
       timer = setTimeout(handleType, typingSpeed);
     };
 
@@ -74,9 +339,9 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
     const el = document.getElementById(id);
     if (el) {
       if ((window as any).lenis) {
-        (window as any).lenis.scrollTo(el, { offset: -70, duration: 1.2 });
+        (window as any).lenis.scrollTo(el, { offset: -80, duration: 1.2 });
       } else {
-        const top = el.getBoundingClientRect().top + window.pageYOffset - 70;
+        const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
         window.scrollTo({ top, behavior: 'smooth' });
       }
     }
@@ -85,78 +350,16 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
   return (
     <div
       className="relative w-full min-h-screen overflow-hidden flex flex-col justify-between"
-      style={{
-        background: 'transparent',
-      }}
+      style={{ background: 'transparent' }}
     >
-      {/* Premium Header/Navigation Menu */}
-      <header className="relative z-50 w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-        {/* Cursive Logo */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="cursor-pointer"
-          onClick={() => handleScrollTo('hero-section')}
-        >
-          <span 
-            style={{
-              fontFamily: "'Dancing Script', cursive",
-              fontSize: "2.2rem",
-              fontWeight: 700,
-              color: "#6b4724", // Warm brown matching reference
-              textShadow: "0 2px 4px rgba(0,0,0,0.05)"
-            }}
-          >
-            Yash.
-          </span>
-        </motion.div>
+      {/* Fixed premium navbar */}
+      <PremiumNavbar activeSection={activeSection} />
 
-        {/* Navigation items (Centered in header) */}
-        <nav className="hidden lg:flex items-center gap-5">
-          {NAV_ITEMS.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <motion.button
-                key={item.label}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.05 }}
-                onClick={() => handleScrollTo(item.id)}
-                className="flex items-center gap-1.5 text-sm font-semibold text-gray-700 hover:text-[#8b5a2b] transition-all duration-300 py-2 px-3 rounded-lg hover:bg-white/50 cursor-pointer"
-              >
-                <Icon size={15} className="text-[#8b5a2b]/70 group-hover:text-[#8b5a2b]" />
-                <span>{item.label}</span>
-              </motion.button>
-            );
-          })}
-        </nav>
-
-        {/* Download Resume Button */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-sm font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
-            style={{
-              background: "linear-gradient(135deg, #8b5a2b 0%, #704720 100%)", // curating rich brown palette
-            }}
-          >
-            <Download size={15} />
-            <span>Download Resume</span>
-            <ArrowRight size={14} />
-          </a>
-        </motion.div>
-      </header>
+      {/* Spacer to prevent content from hiding behind fixed navbar */}
+      <div style={{ height: 72 }} />
 
       {/* Subtle textured background shapes */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Shape 1: Settings (Gear) - Top Left */}
         <motion.div
           style={{ position: 'absolute', top: '12%', left: '6%', color: '#8b5a2b', opacity: 0.04 }}
           animate={{ rotate: 360 }}
@@ -165,7 +368,6 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
           <Settings size={130} strokeWidth={1} />
         </motion.div>
 
-        {/* Shape 2: Code2 - Bottom Left */}
         <motion.div
           style={{ position: 'absolute', bottom: '15%', left: '12%', color: '#8b5a2b', opacity: 0.035 }}
           animate={{ y: [0, -15, 0] }}
@@ -174,7 +376,6 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
           <Code2 size={160} strokeWidth={0.8} />
         </motion.div>
 
-        {/* Shape 3: MessageSquare - Center Top */}
         <motion.div
           style={{ position: 'absolute', top: '22%', left: '42%', color: '#8b5a2b', opacity: 0.03 }}
           animate={{ y: [0, 12, 0], x: [0, 8, 0] }}
@@ -183,7 +384,6 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
           <MessageSquare size={90} strokeWidth={1} />
         </motion.div>
 
-        {/* Shape 4: Cpu - Bottom Center */}
         <motion.div
           style={{ position: 'absolute', bottom: '8%', left: '55%', color: '#8b5a2b', opacity: 0.035 }}
           animate={{ scale: [1, 1.05, 1] }}
@@ -192,7 +392,6 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
           <Cpu size={110} strokeWidth={0.8} />
         </motion.div>
 
-        {/* Shape 5: Triangle - Center Right */}
         <motion.div
           style={{ position: 'absolute', top: '38%', right: '35%', color: '#8b5a2b', opacity: 0.03 }}
           animate={{ rotate: -360 }}
@@ -201,7 +400,6 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
           <Triangle size={140} strokeWidth={0.8} />
         </motion.div>
 
-        {/* Shape 6: ArrowUpRight - Top Right */}
         <motion.div
           style={{ position: 'absolute', top: '15%', right: '15%', color: '#8b5a2b', opacity: 0.04 }}
           animate={{ x: [0, 10, 0], y: [0, -10, 0] }}
@@ -226,7 +424,7 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
               style={{
                 fontFamily: "'Dancing Script', cursive",
                 fontSize: "2.4rem",
-                color: "#8b5b35", // Warm medium brown
+                color: "#8b5b35",
                 fontWeight: 700,
               }}
             >
@@ -237,19 +435,14 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
           {/* Name */}
           <h1
             className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-3 text-[#1e293b]"
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              lineHeight: 1.1,
-            }}
+            style={{ fontFamily: "'Inter', sans-serif", lineHeight: 1.1 }}
           >
             Yash Gautam
           </h1>
 
           {/* Dynamic typing roles */}
           <div className="flex items-center gap-2 mb-4 h-8 sm:h-10">
-            <span className="text-lg sm:text-xl font-bold text-gray-500">
-              Full-Stack
-            </span>
+            <span className="text-lg sm:text-xl font-bold text-gray-500">Full-Stack</span>
             <span
               style={{
                 fontFamily: "'Dancing Script', cursive",
@@ -260,7 +453,7 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
             >
               {currentText}
             </span>
-            <span 
+            <span
               className="inline-block w-1.5 h-6 bg-[#8b5a2b] animate-pulse"
               style={{ verticalAlign: "middle" }}
             />
@@ -286,12 +479,8 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
                 boxShadow: "0 4px 14px rgba(139, 90, 43, 0.06)",
               }}
             >
-              <div className="w-6 h-6 rounded-lg bg-[#8b5a2b]/10 flex items-center justify-center flex-shrink-0 text-[#8b5a2b]">
-                ✨
-              </div>
-              <div className="text-xs font-bold text-gray-800">
-                Google Gemini Campus Ambassador
-              </div>
+              <div className="w-6 h-6 rounded-lg bg-[#8b5a2b]/10 flex items-center justify-center flex-shrink-0 text-[#8b5a2b]">✨</div>
+              <div className="text-xs font-bold text-gray-800">Google Gemini Campus Ambassador</div>
             </div>
 
             {/* Techfest IIT Bombay CA */}
@@ -304,15 +493,11 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
                 boxShadow: "0 4px 14px rgba(139, 90, 43, 0.06)",
               }}
             >
-              <div className="w-6 h-6 rounded-lg bg-[#8b5a2b]/10 flex items-center justify-center flex-shrink-0 text-[#8b5a2b]">
-                🎓
-              </div>
-              <div className="text-xs font-bold text-gray-800">
-                Techfest, IIT Bombay Ambassador
-              </div>
+              <div className="w-6 h-6 rounded-lg bg-[#8b5a2b]/10 flex items-center justify-center flex-shrink-0 text-[#8b5a2b]">🎓</div>
+              <div className="text-xs font-bold text-gray-800">Techfest, IIT Bombay Ambassador</div>
             </div>
 
-            {/* LaunchByte Founder Card (Clickable to WhatsApp / LinkedIn) */}
+            {/* LaunchByte Founder Card */}
             <div
               className="group relative flex items-center gap-2.5 px-3.5 py-2 rounded-2xl transition-all duration-300 hover:scale-[1.04]"
               style={{
@@ -327,11 +512,7 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
                 alt="LaunchByte Community"
                 className="w-6 h-6 rounded-full object-cover border border-[#8b5a2b]/30"
               />
-              <div className="text-xs font-extrabold text-[#704720]">
-                Founder @ LaunchByte
-              </div>
-
-              {/* Action Links */}
+              <div className="text-xs font-extrabold text-[#704720]">Founder @ LaunchByte</div>
               <div className="flex items-center gap-1.5 ml-1">
                 <a
                   href="https://chat.whatsapp.com/DfB8awNjkjj7UkB5h2eW1e"
@@ -360,14 +541,12 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
             <button
               onClick={() => handleScrollTo('projects-section')}
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-white text-sm font-extrabold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
-              style={{
-                background: "linear-gradient(135deg, #8b5a2b 0%, #704720 100%)",
-              }}
+              style={{ background: "linear-gradient(135deg, #8b5a2b 0%, #704720 100%)" }}
             >
               <span>View My Work</span>
               <ArrowRight size={16} />
             </button>
-            
+
             <button
               onClick={() => handleScrollTo('end-section')}
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-[#8b5a2b] text-sm font-extrabold border-2 border-[#8b5a2b]/30 hover:border-[#8b5a2b] bg-white/40 hover:bg-white/80 transition-all duration-300 hover:scale-105 cursor-pointer"
@@ -378,7 +557,7 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
           </div>
         </motion.div>
 
-        {/* Mobile/Tablet Portrait Image (inline grid, hidden on desktop, vignette blended) */}
+        {/* Mobile/Tablet Portrait Image */}
         <div className="lg:hidden flex justify-center items-center mt-6 w-full">
           <div className="relative w-full max-w-[340px] aspect-[4/5]" style={{ overflow: "visible", background: "transparent" }}>
             <img
@@ -397,15 +576,10 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
         </div>
       </div>
 
-      {/* Desktop-only: Large Portrait Image Cutout aligned to viewport edges (Avinash layout with vignette fade) */}
-      <div 
+      {/* Desktop-only: Large Portrait Image */}
+      <div
         className="absolute right-0 bottom-0 h-[96vh] w-[50%] pointer-events-none z-0 hidden lg:flex items-end justify-end"
-        style={{
-          background: "transparent",
-          backgroundColor: "transparent",
-          boxShadow: "none",
-          overflow: "visible"
-        }}
+        style={{ background: "transparent", overflow: "visible" }}
       >
         <motion.img
           initial={{ opacity: 0, x: 60 }}
@@ -424,19 +598,22 @@ export function HeroSection({ onScrollDown }: { onScrollDown?: () => void }) {
         />
       </div>
 
-      {/* Floating WhatsApp Contact Button */}
+      {/* Floating WhatsApp Button */}
       <div className="fixed bottom-6 right-6 z-[100]">
         <motion.a
-          href="https://wa.me/919557393926" // Yash's whatsapp contact
+          href="https://wa.me/919557393926"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-14 h-14 rounded-full bg-[#25d366] flex items-center justify-center shadow-lg hover:shadow-2xl cursor-pointer"
+          className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl cursor-pointer"
           whileHover={{ scale: 1.12, rotate: 8 }}
           whileTap={{ scale: 0.95 }}
           aria-label="Contact Yash on WhatsApp"
         >
-          <svg viewBox="0 0 24 24" className="w-8 h-8 fill-white">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.003 5.324 5.328 0 11.983 0c3.23 0 6.262 1.255 8.537 3.535 2.275 2.279 3.528 5.311 3.524 8.535-.01 6.671-5.335 11.996-11.995 11.996-2.005 0-3.974-.499-5.729-1.452L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.45 5.535 0 10.026-4.48 10.033-10.02a9.925 9.925 0 0 0-2.93-7.147 9.9 9.9 0 0 0-7.16-2.91c-5.539 0-10.043 4.49-10.048 10.03-.001 1.93.504 3.812 1.461 5.485l-1.002 3.655 3.746-.983zm13.125-7.391c-.272-.136-1.614-.796-1.865-.887-.25-.09-.432-.136-.614.136-.182.273-.705.887-.864 1.069-.159.182-.318.204-.59.068-.272-.136-1.15-.424-2.19-1.353-.809-.721-1.355-1.612-1.514-1.886-.159-.273-.017-.42.12-.556.123-.122.272-.318.409-.477.137-.159.182-.272.272-.454.09-.182.045-.341-.022-.477-.068-.136-.614-1.477-.841-2.023-.222-.533-.443-.46-.614-.469-.158-.008-.341-.01-.523-.01a1.003 1.003 0 0 0-.727.341c-.25.273-.954.932-.954 2.272 0 1.341.977 2.636 1.114 2.818.137.182 1.92 2.931 4.653 4.114.65.281 1.157.449 1.553.575.653.208 1.248.179 1.717.109.524-.078 1.614-.659 1.841-1.295.227-.636.227-1.182.159-1.295-.068-.113-.25-.204-.523-.341z"/>
+          {/* Official WhatsApp logo */}
+          <svg viewBox="0 0 32 32" className="w-8 h-8" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="16" fill="#fff"/>
+            <path fill="#25D366" d="M16 3.2A12.8 12.8 0 0 0 5.18 22.5L3.2 28.8l6.46-1.95A12.8 12.8 0 1 0 16 3.2z"/>
+            <path fill="#fff" d="M22.25 19.57c-.28-.14-1.67-.82-1.93-.91-.26-.1-.45-.14-.64.14-.19.28-.73.91-.9 1.1-.16.19-.33.21-.61.07a7.7 7.7 0 0 1-2.27-1.4 8.5 8.5 0 0 1-1.57-1.95c-.16-.28 0-.43.12-.57.13-.13.28-.33.42-.5.14-.16.19-.28.28-.47.1-.19.05-.36-.02-.5-.07-.14-.64-1.54-.88-2.1-.23-.56-.47-.48-.64-.49h-.55a1.06 1.06 0 0 0-.77.36 3.23 3.23 0 0 0-1 2.4 5.6 5.6 0 0 0 1.17 2.97c.14.19 2.03 3.1 4.92 4.35.69.3 1.22.47 1.64.6a3.95 3.95 0 0 0 1.81.11 2.96 2.96 0 0 0 1.94-1.37 2.4 2.4 0 0 0 .17-1.37c-.08-.12-.29-.19-.57-.33z"/>
           </svg>
         </motion.a>
       </div>

@@ -192,15 +192,15 @@ export default function App() {
     if (page !== "portfolio") return;
 
     const sections = [
-      { id: "hero-section", name: "hero" },
-      { id: "about-section", name: "about" },
-      { id: "evolution-section", name: "evolution" },
-      { id: "projects-section", name: "projects" },
-      { id: "beyond-section", name: "beyond" },
-      { id: "skills-section", name: "skills" },
-      { id: "services-section", name: "services" },
+      { id: "hero-section",        name: "hero" },
+      { id: "about-section",       name: "about" },
+      { id: "evolution-section",   name: "evolution" },
+      { id: "projects-section",    name: "projects" },
+      { id: "beyond-section",      name: "beyond" },
+      { id: "skills-section",      name: "skills" },
+      { id: "services-section",    name: "services" },
       { id: "recognition-section", name: "recognition" },
-      { id: "end-section", name: "end" },
+      { id: "end-section",         name: "end" },
     ];
 
     const handleScroll = () => {
@@ -287,10 +287,10 @@ export default function App() {
 
       <div
         style={{
-          width: "100vw",
+          width: "100%",
           minHeight: "100vh",
           position: "relative",
-          overflow: "visible",
+          overflow: "hidden",
           background: "linear-gradient(135deg,#f7efe6 0%,#f3e6d8 25%,#eedecc 50%,#f4e8dc 75%,#f8f1e8 100%)",
           backgroundAttachment: "fixed",
         }}
@@ -325,9 +325,12 @@ export default function App() {
             <>
               <div className="w-full flex flex-col">
                 <div id="hero-section" className="w-full scroll-mt-6">
-                  <HeroSection onScrollDown={() => {
-                    document.getElementById("evolution-section")?.scrollIntoView({ behavior: "smooth" });
-                  }} />
+                  <HeroSection
+                    activeSection={activeSection}
+                    onScrollDown={() => {
+                      document.getElementById("evolution-section")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                  />
                 </div>
                 <div id="about-section" className="w-full scroll-mt-20">
                   {/* About Anchor target */}

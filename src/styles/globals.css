@@ -1,0 +1,89 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   GLOBAL CSS — Premium Portfolio Additions
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Card float idle animation ── */
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-7px); }
+}
+
+/* ── Animated border gradient spin (used via JS background-position) ── */
+@keyframes borderGradientSpin {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Navbar active-section glow pill ── */
+@keyframes navActivePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(139,90,43,0); }
+  50%       { box-shadow: 0 0 8px 2px rgba(139,90,43,0.22); }
+}
+
+/* ── Soft shimmer sweep ── */
+@keyframes shimmerSweep {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(300%) skewX(-15deg); }
+}
+
+/* ── Fade up for stagger ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Orb float ── */
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(20px, -15px) scale(1.04); }
+  66%       { transform: translate(-15px, 10px) scale(0.97); }
+}
+
+/* ── Glass morphism utility ── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(139, 90, 43, 0.1), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+/* ── Prevent horizontal scrollbar ── */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* ── Premium scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-horizontal {
+  display: none;
+  height: 0px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(251, 247, 242, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4a373, #8b5a2b);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #b87d4b, #704720);
+}
+
+/* ── Smooth focus outlines ── */
+:focus-visible {
+  outline: 2px solid rgba(139, 90, 43, 0.5);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Selection color ── */
+::selection {
+  background: rgba(212, 163, 115, 0.35);
+  color: #2d1f10;
+}
