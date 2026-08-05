@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { motion, useScroll, useTransform, useInView, useSpring } from "motion/react";
+import { motion, useScroll, useTransform, useInView, useSpring, useMotionValue, useSpring as useSpringMotion } from "motion/react";
 import { GraduationCap, Code2, Trophy, GitBranch, Brain } from "lucide-react";
 
 // ─── Color tokens ─────────────────────────────────────────────────────────────
@@ -46,17 +46,17 @@ interface MilestoneData {
 
 const MILESTONES: MilestoneData[] = [
   {
-    id:1, period:"2022 – Present",
-    title:"B.Tech CSE (AI & ML)", subtitle:"NIET Greater Noida",
-    highlights:["Started coding journey","Developed interest in AI","Built foundation in problem solving","Explored modern technologies"],
+    id:1, period:"2025 – Present",
+    title:"B.Tech CSE (AI & ML)", subtitle:"NIET, Greater Noida",
+    highlights:["Started my B.Tech journey in 2025","Built strong foundations in C++","Learned Data Structures & Algorithms","Explored Artificial Intelligence & Machine Learning","Built problem-solving skills through projects and coding"],
     Icon:GraduationCap, tag:"Education", side:"left",
-    accent:["Python","DSA","AI/ML","Mathematics"], accentType:"pills",
+    accent:["C++","DSA","Python","AI/ML","Mathematics"], accentType:"pills",
     glowColor:"rgba(136,184,232,0.55)", glowColorSoft:"rgba(136,184,232,0.18)",
     // Empty space is on the RIGHT
     skillBalls:[
-      { name:"Python",      x:"14%", y:"8%",  delay:0   },
-      { name:"C++",         x:"58%", y:"12%", delay:0.5 },
-      { name:"DSA",         x:"68%", y:"42%", delay:1.0 },
+      { name:"C++",         x:"14%", y:"8%",  delay:0   },
+      { name:"DSA",         x:"58%", y:"12%", delay:0.5 },
+      { name:"Python",      x:"68%", y:"42%", delay:1.0 },
       { name:"AI / ML",     x:"10%", y:"52%", delay:0.7 },
       { name:"Mathematics", x:"42%", y:"74%", delay:1.3 },
     ],
@@ -64,11 +64,11 @@ const MILESTONES: MilestoneData[] = [
     ballText:"#2a5a9a", ballDotColor:"#6aaade",
   },
   {
-    id:2, period:"2023",
-    title:"Web Developer", subtitle:"Frontend Engineering",
-    highlights:["Built responsive websites","Modern UI/UX development","React and Next.js projects","Frontend engineering experience"],
+    id:2, period:"2025 – 2026",
+    title:"Frontend Developer", subtitle:"Building Modern Web Experiences",
+    highlights:["Learned HTML, CSS and JavaScript","Built responsive websites","Started React development","Learned Next.js and Tailwind CSS","Developed real-world frontend projects"],
     Icon:Code2, tag:"Development", side:"right",
-    accent:["React","Next.js","Tailwind","TypeScript"], accentType:"pills",
+    accent:["HTML/CSS","JavaScript","React","Next.js","Tailwind","TypeScript"], accentType:"pills",
     glowColor:"rgba(176,160,232,0.55)", glowColorSoft:"rgba(176,160,232,0.18)",
     // Empty space is on the LEFT
     skillBalls:[
@@ -82,11 +82,11 @@ const MILESTONES: MilestoneData[] = [
     ballText:"#4a34a0", ballDotColor:"#9a88d8",
   },
   {
-    id:3, period:"2023",
-    title:"Hackathon Builder", subtitle:"Innovation & Speed",
-    highlights:["Participated in hackathons","Rapid prototyping experience","Team collaboration","Built innovative solutions"],
-    Icon:Trophy, tag:"Competition", side:"left",
-    accent:["5+ Events","48hr Sprints","Team Leader"], accentType:"stats",
+    id:3, period:"2026 – Present",
+    title:"Hackathon Builder", subtitle:"Innovation & Rapid Prototyping",
+    highlights:["Participated in national hackathons","Built AI-powered MVPs","Worked in cross-functional teams","Rapid prototyping under deadlines","Focused on solving real-world problems"],
+    Icon:Trophy, tag:"Hackathons", side:"left",
+    accent:["National Events","AI-Powered MVPs","Cross-functional Teams"], accentType:"stats",
     glowColor:"rgba(224,176,140,0.55)", glowColorSoft:"rgba(224,176,140,0.18)",
     // Empty space is on the RIGHT
     skillBalls:[
@@ -100,37 +100,36 @@ const MILESTONES: MilestoneData[] = [
     ballText:"#8a5020", ballDotColor:"#d49060",
   },
   {
-    id:4, period:"2024",
-    title:"Open Source Contributor", subtitle:"GSSoC & GitHub",
-    highlights:["GSSoC Contributor","Pull requests and issue solving","GitHub collaboration","Community contribution"],
+    id:4, period:"2026 – Present",
+    title:"Open Source Contributor", subtitle:"GitHub & Community",
+    highlights:["Contributed to open-source projects","Improved collaboration through Git","Worked with pull requests","Learned version control workflows"],
     Icon:GitBranch, tag:"Open Source", side:"right",
     accent:[], accentType:"github",
     glowColor:"rgba(212,128,144,0.55)", glowColorSoft:"rgba(212,128,144,0.18)",
     // Empty space is on the LEFT
     skillBalls:[
       { name:"GitHub",   x:"14%", y:"8%",  delay:0   },
-      { name:"Git CLI",  x:"58%", y:"12%", delay:0.4 },
-      { name:"GSSoC",    x:"68%", y:"44%", delay:0.9 },
-      { name:"Open PRs", x:"8%",  y:"54%", delay:0.6 },
-      { name:"Markdown", x:"36%", y:"74%", delay:1.1 },
+      { name:"Git",      x:"58%", y:"12%", delay:0.4 },
+      { name:"Open PRs", x:"68%", y:"44%", delay:0.9 },
+      { name:"Markdown", x:"8%",  y:"54%", delay:0.6 },
     ],
     ballBg:"rgba(238,175,185,0.40)", ballBorder:"rgba(205,130,148,0.55)",
     ballText:"#8a2040", ballDotColor:"#d06880",
   },
   {
-    id:5, period:"2024 – Present",
-    title:"AI Developer", subtitle:"Agents & Automation",
-    highlights:["AI Agents","Automation Systems","Intelligent Applications","Machine Learning Exploration"],
-    Icon:Brain, tag:"AI & ML", side:"left",
+    id:5, period:"2026 – Present",
+    title:"AI Developer & Community Builder", subtitle:"LaunchByte | AI Agents | Automation",
+    highlights:["Building AI Agents & Automation","Founder of LaunchByte","Building full-stack AI applications","Participating in hackathons","Growing a student tech community"],
+    Icon:Brain, tag:"AI & Community", side:"left",
     accent:[], accentType:"neural",
     glowColor:"rgba(184,168,224,0.55)", glowColorSoft:"rgba(184,168,224,0.18)",
     // Empty space is on the RIGHT
     skillBalls:[
-      { name:"LangChain",    x:"12%", y:"8%",  delay:0   },
-      { name:"OpenAI API",   x:"56%", y:"14%", delay:0.5 },
-      { name:"AI Agents",    x:"66%", y:"46%", delay:1.0 },
-      { name:"Automation",   x:"8%",  y:"56%", delay:0.7 },
-      { name:"Hugging Face", x:"36%", y:"76%", delay:1.2 },
+      { name:"LangChain",  x:"12%", y:"8%",  delay:0   },
+      { name:"OpenAI API", x:"56%", y:"14%", delay:0.5 },
+      { name:"AI Agents",  x:"66%", y:"46%", delay:1.0 },
+      { name:"Automation", x:"8%",  y:"56%", delay:0.7 },
+      { name:"LaunchByte", x:"36%", y:"76%", delay:1.2 },
     ],
     ballBg:"rgba(195,182,240,0.40)", ballBorder:"rgba(158,140,222,0.55)",
     ballText:"#3c2a98", ballDotColor:"#9880d0",
@@ -140,19 +139,17 @@ const MILESTONES: MilestoneData[] = [
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function ContribGrid() {
-  const cols = 16; const rows = 5;
-  const cells = Array.from({ length: cols*rows }, (_, i) => {
-    const r = (i*7919+1234567)%100/100;
-    return r<0.45?0:r<0.65?1:r<0.82?2:r<0.93?3:4;
-  });
-  const colors = ["rgba(180,160,220,0.12)","rgba(194,84,114,0.2)","rgba(194,84,114,0.4)","rgba(194,84,114,0.65)","rgba(194,84,114,0.9)"];
   return (
     <div className="mt-5">
-      <div className="grid gap-[3px]" style={{ gridTemplateColumns:`repeat(${cols},1fr)` }}>
-        {cells.map((v,i)=><div key={i} className="rounded-sm" style={{ width:10,height:10,background:colors[v] }}/>)}
+      <div className="flex items-center gap-3 px-4 py-3 rounded-xl"
+        style={{ background:"rgba(194,84,114,0.06)", border:"1px dashed rgba(194,84,114,0.22)" }}>
+        <GitBranch size={15} style={{ color:C.accent, flexShrink:0 }} />
+        <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"0.85rem", color:C.textSecondary, fontWeight:550 }}>
+          Open Source Journey Started
+        </span>
       </div>
-      <p style={{ color:C.textMuted,fontFamily:"'DM Sans',sans-serif",fontSize:"0.78rem",marginTop:7 }}>
-        Contribution activity
+      <p style={{ color:C.textMuted, fontFamily:"'DM Sans',sans-serif", fontSize:"0.78rem", marginTop:7 }}>
+        Building in public · 2026 onwards
       </p>
     </div>
   );
@@ -227,12 +224,35 @@ function SkillPill({ ball, bg, border, text, dot }: {
   );
 }
 
-// Full milestone row
+// Full milestone row — Premium Glassmorphism Card
 function MilestoneCard({ milestone, index }: { milestone: MilestoneData; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-  const [hovered, setHovered] = useState(false);
+  const ref        = useRef<HTMLDivElement>(null);
+  const innerRef   = useRef<HTMLDivElement>(null);
+  const isInView   = useInView(ref, { once: true, margin: "-80px" });
+  const [hovered, setHovered]   = useState(false);
+  const [mouseXY, setMouseXY]   = useState({ x: 0.5, y: 0.5 });
   const { Icon, side } = milestone;
+
+  // Tilt motion values — spring-smoothed
+  const rawRY = useMotionValue(0);
+  const rawRX = useMotionValue(0);
+  const rotateY = useSpringMotion(rawRY, { stiffness: 180, damping: 22 });
+  const rotateX = useSpringMotion(rawRX, { stiffness: 180, damping: 22 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!innerRef.current) return;
+    const r = innerRef.current.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width;
+    const ny = (e.clientY - r.top)  / r.height;
+    setMouseXY({ x: nx, y: ny });
+    rawRY.set((nx - 0.5) *  9);
+    rawRX.set((0.5 - ny) *  6);
+  };
+  const handleMouseLeave = () => {
+    setHovered(false);
+    setMouseXY({ x: 0.5, y: 0.5 });
+    rawRY.set(0); rawRX.set(0);
+  };
 
   const cardVariants = {
     hidden:  { opacity:0, x: side==="left" ? -55 : 55, y:18, scale:0.96 },
@@ -240,21 +260,24 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneData; index: 
       transition:{ duration:0.78, delay:0.05, ease:[0.22,1,0.36,1] as const } },
   };
 
+  // Multi-layered premium shadows
   const shadowBase = `
-    0 4px 32px rgba(120,100,180,0.1),
-    0 1px 0 rgba(255,255,255,0.98) inset,
-    0 -1px 0 rgba(0,0,0,0.05) inset,
-    3px 0 0 rgba(255,255,255,0.55) inset,
-    -1px 0 0 rgba(0,0,0,0.04) inset
+    0 1px 2px rgba(0,0,0,0.04),
+    0 4px 12px rgba(0,0,0,0.06),
+    0 12px 32px rgba(0,0,0,0.07),
+    0 32px 64px rgba(0,0,0,0.05),
+    0 1px 0 rgba(255,255,255,0.92) inset
   `;
   const shadowHover = `
-    0 10px 60px ${milestone.glowColor},
-    0 3px 24px ${milestone.glowColorSoft},
-    0 1px 0 rgba(255,255,255,0.98) inset,
-    0 -1px 0 rgba(0,0,0,0.05) inset,
-    3px 0 0 rgba(255,255,255,0.55) inset,
-    -1px 0 0 rgba(0,0,0,0.04) inset
+    0 2px 4px rgba(0,0,0,0.05),
+    0 8px 24px ${milestone.glowColorSoft},
+    0 20px 60px ${milestone.glowColor},
+    0 48px 96px rgba(0,0,0,0.06),
+    0 1px 0 rgba(255,255,255,0.95) inset
   `;
+
+  const reflectX = `${mouseXY.x * 100}%`;
+  const reflectY = `${mouseXY.y * 100}%`;
 
   // The card column
   const cardCol = (
@@ -262,121 +285,238 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneData; index: 
       variants={cardVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      whileHover={{ scale:1.025, y:-7 }}
-      transition={{ duration:0.32, ease:"easeOut" }}
-      onHoverStart={()=>setHovered(true)}
-      onHoverEnd={()=>setHovered(false)}
-      className={`w-[46%] ${side==="left"?"pr-8 lg:pr-12":"pl-8 lg:pl-12"}`}
-      style={{ cursor:"default" }}
+      className={`w-[43%] ${side==="left"?"pr-6 lg:pr-10":"pl-6 lg:pl-10"}`}
+      style={{ cursor:"default", perspective: "1200px" }}
     >
-      <div className="relative rounded-2xl overflow-hidden"
-        style={{
-          padding:"1.5rem 1.6rem",
-          background: hovered
-            ? "linear-gradient(135deg,rgba(255,255,255,0.78) 0%,rgba(255,255,255,0.60) 100%)"
-            : C.cardBg,
-          backdropFilter:"blur(32px)", WebkitBackdropFilter:"blur(32px)",
-          border:`1px solid ${hovered?"rgba(255,255,255,0.94)":C.cardBorder}`,
-          boxShadow: hovered ? shadowHover : shadowBase,
-          transition:"box-shadow 0.35s ease, background 0.35s ease, border-color 0.35s ease",
-        }}
+      {/* Outer wrapper handles float + lift */}
+      <motion.div
+        animate={hovered
+          ? { y: -8, scale: 1.018 }
+          : { y: [0, -3, 0] }
+        }
+        transition={hovered
+          ? { duration: 0.35, ease: [0.22,1,0.36,1] }
+          : { duration: 4.2, repeat: Infinity, ease: "easeInOut", repeatType: "mirror" }
+        }
       >
-        {/* Mirror top stripe */}
-        <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl pointer-events-none"
-          style={{ background:"linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.98) 40%,rgba(255,255,255,0.98) 60%,transparent 100%)" }} />
+        {/* Inner glass card with 3-D tilt */}
+        <motion.div
+          ref={innerRef}
+          style={{
+            rotateX, rotateY,
+            transformStyle: "preserve-3d",
+            borderRadius: 28,
+          }}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={handleMouseLeave}
+          className="relative overflow-hidden"
+        >
+          {/* Glass surface */}
+          <div
+            style={{
+              padding: "1.1rem 1.2rem 1.15rem",
+              background: hovered ? "rgba(255,255,255,0.24)" : "rgba(255,255,255,0.18)",
+              backdropFilter: "blur(28px)",
+              WebkitBackdropFilter: "blur(28px)",
+              borderRadius: 28,
+              border: `1px solid ${ hovered ? "rgba(255,255,255,0.52)" : "rgba(255,255,255,0.35)" }`,
+              borderTop:  `1.5px solid ${ hovered ? "rgba(255,255,255,0.78)" : "rgba(255,255,255,0.58)" }`,
+              borderLeft: `1.5px solid ${ hovered ? "rgba(255,255,255,0.65)" : "rgba(255,255,255,0.48)" }`,
+              boxShadow: hovered ? shadowHover : shadowBase,
+              transition: "box-shadow 0.35s cubic-bezier(0.22,1,0.36,1), background 0.35s ease, border-color 0.35s ease",
+            }}
+          >
+            {/* Top specular highlight */}
+            <div className="absolute top-0 left-0 right-0 pointer-events-none"
+              style={{
+                height: 1.5, borderRadius: "28px 28px 0 0",
+                background: "linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.95) 38%,rgba(255,255,255,0.95) 62%,transparent 100%)",
+              }} />
 
-        {/* Hover bloom */}
-        <div className="absolute inset-0 rounded-2xl pointer-events-none"
-          style={{ opacity:hovered?1:0, transition:"opacity 0.35s ease",
-            background:`radial-gradient(ellipse at 50% 110%,${milestone.glowColorSoft} 0%,transparent 65%)` }} />
-
-        {/* Header */}
-        <div className="flex items-start justify-between mb-3 relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background:C.accentLight, border:`1px solid ${C.accentBorder}` }}>
-              <Icon size={18} style={{ color:C.accent }} />
+            {/* Cursor-tracked light orb */}
+            <div className="absolute inset-0 pointer-events-none" style={{ borderRadius: 28, overflow: "hidden" }}>
+              <div style={{
+                position: "absolute",
+                width: "55%", height: "55%",
+                left: reflectX, top: reflectY,
+                transform: "translate(-50%,-50%)",
+                background: `radial-gradient(circle, rgba(255,255,255,${ hovered ? "0.18" : "0.10" }) 0%, transparent 70%)`,
+                borderRadius: "50%",
+                filter: "blur(2px)",
+              }} />
             </div>
-            <div>
-              <div style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"0.75rem",fontWeight:700,
-                letterSpacing:"0.1em",textTransform:"uppercase" as const,color:C.accent,marginBottom:3 }}>
-                {milestone.tag}
+
+            {/* Hover bottom glow */}
+            <div className="absolute inset-0 pointer-events-none"
+              style={{
+                borderRadius: 28,
+                opacity: hovered ? 1 : 0, transition: "opacity 0.35s ease",
+                background: `radial-gradient(ellipse at 50% 115%, ${milestone.glowColorSoft} 0%, transparent 62%)`,
+              }} />
+
+            {/* Hover bottom accent bar */}
+            <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
+              style={{
+                height: 2, borderRadius: "0 0 28px 28px",
+                background: `linear-gradient(90deg,transparent,${milestone.glowColor},transparent)`,
+                opacity: hovered ? 1 : 0, transition: "opacity 0.35s ease",
+              }} />
+
+            {/* CONTENT */}
+            <div style={{ position: "relative", zIndex: 10 }}>
+
+              {/* Header row */}
+              <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom: "0.55rem" }}>
+                <div style={{ display:"flex", alignItems:"center", gap: "0.6rem" }}>
+
+                  {/* Circular glass icon */}
+                  <div style={{
+                    width: 34, height: 34, borderRadius: "50%",
+                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                    background: "rgba(255,255,255,0.55)",
+                    backdropFilter: "blur(12px)",
+                    border: `1px solid ${C.accentBorder}`,
+                    boxShadow: `0 2px 8px ${C.accentLight}, 0 1px 0 rgba(255,255,255,0.9) inset`,
+                  }}>
+                    <Icon size={16} style={{ color: C.accent }} />
+                  </div>
+
+                  <div>
+                    <div style={{
+                      fontFamily: "'DM Sans',sans-serif", fontSize: "0.68rem", fontWeight: 700,
+                      letterSpacing: "0.12em", textTransform: "uppercase" as const,
+                      color: C.accent, marginBottom: 2,
+                    }}>
+                      {milestone.tag}
+                    </div>
+                    <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"0.75rem", color:C.textMuted, fontWeight:500 }}>
+                      {milestone.period}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating number pill */}
+                <div style={{
+                  background: "rgba(255,255,255,0.55)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(255,255,255,0.7)",
+                  borderRadius: 999,
+                  padding: "2px 9px",
+                  fontFamily: "'DM Sans',sans-serif", fontSize: "0.68rem",
+                  color: C.textMuted, fontWeight: 600, letterSpacing: "0.04em",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                }}>
+                  0{index+1}
+                </div>
               </div>
-              <div style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"0.8rem",color:C.textMuted,fontWeight:500 }}>
-                {milestone.period}
-              </div>
-            </div>
-          </div>
-          <span className="rounded-full px-2.5 py-0.5 tabular-nums"
-            style={{ background:"rgba(22,22,58,0.06)",border:"1px solid rgba(22,22,58,0.09)",
-              color:C.textMuted,fontFamily:"'DM Sans',sans-serif",fontSize:"0.72rem" }}>
-            0{index+1}
-          </span>
-        </div>
 
-        {/* Title */}
-        <h3 className="relative z-10 leading-snug mb-1"
-          style={{ fontFamily:"'Outfit',sans-serif",fontSize:"1.42rem",fontWeight:700,
-            color:C.textPrimary,letterSpacing:"-0.015em" }}>
-          {milestone.title}
-        </h3>
+              {/* Title */}
+              <h3 style={{
+                fontFamily: "'Outfit',sans-serif",
+                fontSize: "1.22rem", fontWeight: 760,
+                color: C.textPrimary, letterSpacing: "-0.018em",
+                lineHeight: 1.2, marginBottom: "0.18rem",
+              }}>
+                {milestone.title}
+              </h3>
 
-        {/* Subtitle */}
-        <p className="relative z-10 mb-4"
-          style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"0.92rem",color:C.textMuted,fontWeight:500 }}>
-          {milestone.subtitle}
-        </p>
+              {/* Subtitle */}
+              <p style={{
+                fontFamily: "'DM Sans',sans-serif", fontSize: "0.8rem",
+                color: C.textMuted, fontWeight: 500, marginBottom: "0.6rem", lineHeight: 1.4,
+              }}>
+                {milestone.subtitle}
+              </p>
 
-        {/* Highlights */}
-        <ul className="space-y-2 relative z-10">
-          {milestone.highlights.map((h,i)=>(
-            <li key={i} className="flex items-center gap-3">
-              <span className="w-[6px] h-[6px] rounded-full flex-shrink-0"
-                style={{ background:C.accent,boxShadow:`0 0 6px rgba(194,84,114,0.5)` }} />
-              <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"0.95rem",
-                color:C.textSecondary,lineHeight:1.55,fontWeight:450 }}>
-                {h}
-              </span>
-            </li>
-          ))}
-        </ul>
+              {/* Divider */}
+              <div style={{
+                height: 1, marginBottom: "0.55rem",
+                background: `linear-gradient(90deg, transparent, ${C.accentBorder} 40%, ${C.accentBorder} 60%, transparent)`,
+              }} />
 
-        {/* Accent visuals */}
-        {milestone.accentType==="pills" && milestone.accent.length>0 && (
-          <div className="flex flex-wrap gap-2 mt-5 relative z-10">
-            {milestone.accent.map(tag=>(
-              <span key={tag} className="px-2.5 py-1 rounded-full"
-                style={{ background:"rgba(22,22,58,0.07)",border:"1px solid rgba(22,22,58,0.1)",
-                  color:C.textSecondary,fontFamily:"'DM Sans',sans-serif",fontSize:"0.78rem",fontWeight:500 }}>
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-        {milestone.accentType==="stats" && (
-          <div className="flex gap-5 mt-5 relative z-10">
-            {milestone.accent.map(stat=>(
-              <div key={stat} className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background:C.accent }} />
-                <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"0.82rem",color:C.textSecondary,fontWeight:500 }}>
-                  {stat}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-        {milestone.accentType==="github" && <ContribGrid />}
-        {milestone.accentType==="neural"  && <NeuralNet />}
+              {/* Bullet highlights */}
+              <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+                {milestone.highlights.map((h, i) => (
+                  <li key={i} style={{ display:"flex", alignItems:"center", gap:"0.5rem" }}>
+                    <span style={{
+                      width: 5, height: 5, borderRadius: "50%", flexShrink: 0,
+                      background: `radial-gradient(circle, rgba(255,200,210,1) 0%, ${C.accent} 70%)`,
+                      boxShadow: `0 0 5px ${C.accentBorder}`,
+                    }} />
+                    <span style={{
+                      fontFamily: "'DM Sans',sans-serif", fontSize: "0.84rem",
+                      color: C.textSecondary, lineHeight: 1.45, fontWeight: 440,
+                    }}>
+                      {h}
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-        {/* Bottom hover bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] rounded-b-2xl pointer-events-none"
-          style={{ background:`linear-gradient(90deg,transparent,${milestone.glowColor},transparent)`,
-            opacity:hovered?1:0, transition:"opacity 0.35s ease" }} />
-      </div>
+              {/* Glass pill skill tags */}
+              {milestone.accentType==="pills" && milestone.accent.length>0 && (
+                <div style={{ display:"flex", flexWrap:"wrap", gap:"0.35rem", marginTop:"0.65rem" }}>
+                  {milestone.accent.map(tag => (
+                    <motion.span
+                      key={tag}
+                      whileHover={{ scale: 1.06, y: -2 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      style={{
+                        display: "inline-flex", alignItems: "center", gap: 5,
+                        padding: "3px 10px 3px 7px", borderRadius: 999,
+                        background: "rgba(255,255,255,0.45)",
+                        backdropFilter: "blur(10px)",
+                        border: "1px solid rgba(255,255,255,0.6)",
+                        color: C.textSecondary,
+                        fontFamily: "'DM Sans',sans-serif", fontSize: "0.74rem", fontWeight: 560,
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.07), 0 1px 0 rgba(255,255,255,0.8) inset",
+                        cursor: "default",
+                      }}
+                    >
+                      <span style={{
+                        width: 5, height: 5, borderRadius:"50%", flexShrink:0,
+                        background: `radial-gradient(circle,rgba(255,200,210,1),${C.accent})`,
+                        boxShadow: `0 0 4px ${C.accent}88`,
+                      }} />
+                      {tag}
+                    </motion.span>
+                  ))}
+                </div>
+              )}
+
+              {/* Stats row */}
+              {milestone.accentType==="stats" && (
+                <div style={{ display:"flex", flexWrap:"wrap", gap:"0.4rem", marginTop:"0.65rem" }}>
+                  {milestone.accent.map(stat => (
+                    <div key={stat} style={{
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      padding: "3px 10px 3px 8px", borderRadius: 999,
+                      background: "rgba(255,255,255,0.45)",
+                      backdropFilter: "blur(10px)",
+                      border: "1px solid rgba(255,255,255,0.6)",
+                      fontFamily: "'DM Sans',sans-serif", fontSize: "0.74rem",
+                      color: C.textSecondary, fontWeight: 560,
+                      boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
+                    }}>
+                      <span style={{ width:5,height:5,borderRadius:"50%",background:`radial-gradient(circle,rgba(255,200,210,1),${C.accent})`,boxShadow:`0 0 4px ${C.accent}88`,flexShrink:0 }} />
+                      {stat}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {milestone.accentType==="github" && <ContribGrid />}
+              {milestone.accentType==="neural"  && <NeuralNet />}
+
+            </div>{/* /CONTENT */}
+          </div>{/* /glass surface */}
+        </motion.div>{/* /tilt */}
+      </motion.div>{/* /float */}
     </motion.div>
   );
 
-  // The skill-balls column (fills opposite empty side, same height as card)
+  // The skill-balls column
   const ballsCol = (
     <div className="w-[46%] relative self-stretch"
       style={{ padding: side==="left" ? "0 0 0 2.5rem" : "0 2.5rem 0 0" }}>
